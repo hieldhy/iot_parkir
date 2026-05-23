@@ -11,7 +11,17 @@ class ParkingController extends Controller
     // Dashboard
     public function index()
     {
-        $slots = ParkingSlot::all();
+        $slots = ParkingSlot::all()->map(function($slot) {
+            // Cari log aktif (sudah masuk tapi belum keluar) untuk slot ini
+            $activeLog = ParkingLog::where('slot', $slot->slot_name)
+                ->whereNull('keluar')
+                ->orderBy('masuk', 'desc')
+                ->first();
+            
+            $slot->waktu_masuk = $activeLog ? $activeLog->masuk : null;
+            return $slot;
+        });
+
         $logs = ParkingLog::orderBy('masuk', 'desc')->limit(10)->get();
 
         return view('dashboard', compact('slots', 'logs'));

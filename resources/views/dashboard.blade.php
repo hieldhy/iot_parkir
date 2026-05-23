@@ -455,41 +455,23 @@
             </div>
 
             <div class="slots-grid">
-                <!-- Slot 1 -->
-                <div class="slot status-tersedia">
-                    <div class="slot-header">SLOT D1</div>
-                    <div class="slot-body">
+                @foreach($slots as $slot)
+                @php
+                    $isTerisi = $slot->status === 'TERISI';
+                @endphp
+                <div class="slot {{ $isTerisi ? 'status-terisi' : 'status-tersedia' }}" data-waktu-masuk="{{ $slot->waktu_masuk }}">
+                    <div class="slot-header">SLOT {{ $slot->slot_name }}</div>
+                    <div class="slot-body" style="display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; padding: 20px 0;">
                         <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                        
+                        <!-- Durasi Terparkir -->
+                        <div class="duration-badge" style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: {{ $isTerisi ? 'block' : 'none' }}; margin-top: 6px; padding: 2px 8px; background: rgba(0,0,0,0.05); border-radius: 10px;">
+                            ⏱️ <span class="duration-val">Memuat...</span>
+                        </div>
                     </div>
-                    <div class="slot-footer">TERSEDIA</div>
+                    <div class="slot-footer">{{ $slot->status }}</div>
                 </div>
-
-                <!-- Slot 2 -->
-                <div class="slot status-tersedia">
-                    <div class="slot-header">SLOT D2</div>
-                    <div class="slot-body">
-                        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
-                    </div>
-                    <div class="slot-footer">TERSEDIA</div>
-                </div>
-
-                <!-- Slot 3 -->
-                <div class="slot status-tersedia">
-                    <div class="slot-header">SLOT D3</div>
-                    <div class="slot-body">
-                        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
-                    </div>
-                    <div class="slot-footer">TERSEDIA</div>
-                </div>
-
-                <!-- Slot 4 -->
-                <div class="slot status-tersedia">
-                    <div class="slot-header">SLOT D4</div>
-                    <div class="slot-body">
-                        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
-                    </div>
-                    <div class="slot-footer">TERSEDIA</div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -638,19 +620,63 @@
         const slots = document.querySelectorAll('.slot');
         slots.forEach((slot, index) => {
             const footer = slot.querySelector('.slot-footer');
+            const durationBadge = slot.querySelector('.duration-badge');
+            
             if (index < carCount) {
                 // Slot Terisi
-                slot.classList.remove('status-tersedia');
-                slot.classList.add('status-terisi');
-                footer.innerText = 'TERISI';
+                if (!slot.classList.contains('status-terisi')) {
+                    slot.classList.remove('status-tersedia');
+                    slot.classList.add('status-terisi');
+                    footer.innerText = 'TERISI';
+                    // Set waktu masuk ke waktu sekarang jika baru terisi
+                    slot.setAttribute('data-waktu-masuk', new Date().toISOString());
+                    if (durationBadge) durationBadge.style.display = 'block';
+                }
             } else {
                 // Slot Tersedia
                 slot.classList.remove('status-terisi');
                 slot.classList.add('status-tersedia');
                 footer.innerText = 'TERSEDIA';
+                slot.removeAttribute('data-waktu-masuk');
+                if (durationBadge) durationBadge.style.display = 'none';
             }
         });
     }
+
+    function updateDurations() {
+        const slots = document.querySelectorAll('.slot');
+        slots.forEach(slot => {
+            const waktuMasukStr = slot.getAttribute('data-waktu-masuk');
+            const durationVal = slot.querySelector('.duration-val');
+            const durationBadge = slot.querySelector('.duration-badge');
+            
+            if (slot.classList.contains('status-terisi') && waktuMasukStr) {
+                if (durationBadge) durationBadge.style.display = 'block';
+                
+                const masukTime = new Date(waktuMasukStr).getTime();
+                const nowTime = new Date().getTime();
+                const diffMs = nowTime - masukTime;
+                
+                if (diffMs > 0) {
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffSecs = Math.floor((diffMs % 60000) / 1000);
+                    
+                    let durationText = "";
+                    if (diffMins > 0) {
+                        durationText = `${diffMins}m ${diffSecs}s`;
+                    } else {
+                        durationText = `${diffSecs}s`;
+                    }
+                    if (durationVal) durationVal.innerText = durationText;
+                }
+            } else {
+                if (durationBadge) durationBadge.style.display = 'none';
+            }
+        });
+    }
+    
+    // Update durasi parkir real-time setiap detik
+    setInterval(updateDurations, 1000);
 
     function addLogToTable(data) {
         const tbody = document.getElementById('log-table-body');
