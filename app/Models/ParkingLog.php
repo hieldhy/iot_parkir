@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ParkingLog extends Model
 {
-    //
+    protected $fillable = ['slot', 'status', 'plat', 'masuk', 'keluar'];
 }

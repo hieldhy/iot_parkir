@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('parking_logs', function (Blueprint $table) {
             $table->id();
             $table->string('slot');
-            $table->string('vehicle_type')->nullable();
-            $table->string('color')->nullable();
-            $table->string('plate')->nullable();
+            $table->string('status')->default('TERISI');
+            $table->string('plat')->nullable();
             $table->timestamp('masuk')->nullable();
             $table->timestamp('keluar')->nullable();
+            $table->timestamps();
         });
     }
 

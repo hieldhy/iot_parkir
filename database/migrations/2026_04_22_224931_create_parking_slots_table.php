@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('parking_slots', function (Blueprint $table) {
             $table->id();
-            $table->string('slot_name'); // D1, D2
+            $table->string('slot_name')->unique(); // D1, D2
             $table->enum('status', ['TERISI', 'TERSEDIA'])->default('TERSEDIA');
             $table->timestamps();
         });

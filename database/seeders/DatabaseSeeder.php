@@ -15,11 +15,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. Create Default Parking Slots
+        $slots = ['D1', 'D2', 'D3', 'D4'];
+        foreach ($slots as $slot) {
+            \App\Models\ParkingSlot::updateOrCreate(
+                ['slot_name' => $slot],
+                ['status' => 'TERSEDIA']
+            );
+        }
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // 2. Create Dummy Parking Logs
+        \App\Models\ParkingLog::create([
+            'slot' => 'D1',
+            'status' => 'TERISI',
+            'plat' => 'DA 6769 LAA',
+            'masuk' => '2026-05-23 09:00:00',
+            'keluar' => null,
+        ]);
+
+        \App\Models\ParkingLog::create([
+            'slot' => 'D2',
+            'status' => 'KELUAR',
+            'plat' => 'B 1234 ABC',
+            'masuk' => '2026-05-23 08:30:00',
+            'keluar' => '2026-05-23 10:15:00',
+        ]);
+
+        \App\Models\ParkingLog::create([
+            'slot' => 'D3',
+            'status' => 'TERISI',
+            'plat' => 'D 999 SS',
+            'masuk' => '2026-05-23 11:00:00',
+            'keluar' => null,
         ]);
     }
 }

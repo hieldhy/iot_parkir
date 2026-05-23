@@ -28,13 +28,32 @@ class ParkingController extends Controller
             );
 
             if ($slot['status'] == 'TERISI') {
-                ParkingLog::create([
-                    'slot' => $slot['name'],
-                    'vehicle_type' => $slot['type'] ?? null,
-                    'color' => $slot['color'] ?? null,
-                    'plate' => $slot['plate'] ?? null,
-                    'masuk' => now()
-                ]);
+                // Mencegah duplikasi: hanya buat log baru jika belum ada mobil di slot ini yang belum keluar
+                $existingLog = ParkingLog::where('slot', $slot['name'])
+                    ->whereNull('keluar')
+                    ->first();
+
+                if (!$existingLog) {
+                    ParkingLog::create([
+                        'slot' => $slot['name'],
+                        'status' => 'TERISI',
+                        'plat' => $slot['plate'] ?? null,
+                        'masuk' => now()
+                    ]);
+                }
+            } else if ($slot['status'] == 'TERSEDIA') {
+                // Logika ketika mobil keluar: cari log aktif terakhir di slot ini lalu isi kolom 'keluar'
+                $activeLog = ParkingLog::where('slot', $slot['name'])
+                    ->whereNull('keluar')
+                    ->orderBy('masuk', 'desc')
+                    ->first();
+
+                if ($activeLog) {
+                    $activeLog->update([
+                        'keluar' => now(),
+                        'status' => 'KELUAR'
+                    ]);
+                }
             }
         }
 

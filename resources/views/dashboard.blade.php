@@ -381,9 +381,6 @@
             <div style="background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2);">
                 ⏱️ Latensi: <span id="ping-latency">12ms</span>
             </div>
-            <div style="background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2);">
-                📍 Kampus Utama
-            </div>
         </div>
     </div>
 
@@ -510,8 +507,6 @@
                         <th>No</th>
                         <th>Slot</th>
                         <th>Status</th>
-                        <th>Model/Tipe</th>
-                        <th>Warna</th>
                         <th>Plat</th>
                         <th>Masuk</th>
                         <th>Keluar</th>
@@ -523,8 +518,6 @@
                         <td>{{ $i+1 }}</td>
                         <td>{{ $log->slot ?? '-' }}</td>
                         <td style="color: {{ strtoupper($log->status ?? 'TERISI') === 'TERISI' ? 'var(--text-dark)' : 'var(--text-dark)' }}">{{ strtoupper($log->status ?? 'TERISI') }}</td>
-                        <td>{{ $log->model ?? 'AVANZA' }}</td>
-                        <td>{{ $log->warna ?? 'SILVER' }}</td>
                         <td>{{ $log->plat ?? 'DA 6769 LAA' }}</td>
                         <td>
                             @if(isset($log->masuk))
@@ -554,7 +547,7 @@
                     @endforeach
                     @if(count($logs) === 0)
                     <tr>
-                        <td colspan="8" style="text-align: center; color: var(--text-muted); font-weight: 500;">Tidak ada data.</td>
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); font-weight: 500;">Tidak ada data.</td>
                     </tr>
                     @endif
                 </tbody>
@@ -676,22 +669,20 @@
         
         const newRow = document.createElement('tr');
         
-        newRow.innerHTML = \`
+        newRow.innerHTML = `
             <td>-</td>
             <td>Semua Slot</td>
-            <td style="color: var(--text-dark); font-weight: bold;">\${logStatus}</td>
-            <td>YOLOv8</td>
-            <td>-</td>
+            <td style="color: var(--text-dark); font-weight: bold;">${logStatus}</td>
             <td>-</td>
             <td>
-                <div style="font-size: 12px; font-weight: 500;">\${dateStr}</div>
-                <div style="font-size: 11px;">\${timeStr}</div>
+                <div style="font-size: 12px; font-weight: 500;">${dateStr}</div>
+                <div style="font-size: 11px;">${timeStr}</div>
             </td>
             <td>
                 <div style="font-size: 12px; font-weight: 500;">(Realtime Data)</div>
-                <div style="font-size: 11px;">Mobil Terdeteksi: \${data.car_count}</div>
+                <div style="font-size: 11px;">Mobil Terdeteksi: ${data.car_count}</div>
             </td>
-        \`;
+        `;
 
         tbody.insertBefore(newRow, tbody.firstChild);
 
